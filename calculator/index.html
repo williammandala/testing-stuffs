@@ -7,6 +7,8 @@
 </head>
 <body>
   <div class="calculator">
+    <!-- New div to display the previous calculation -->
+    <div class="calculator-previous"></div>
     <input type="text" class="calculator-screen" value="" disabled />
 
     <div class="calculator-keys">
@@ -34,10 +36,10 @@
       <button type="button" value="3">3</button>
       <button type="button" class="operator" value="+">+</button>
 
-      <!-- Fifth row: 0, decimal point, Ans, = -->
+      <!-- Fifth row: 0, decimal point, Save, = -->
       <button type="button" value="0">0</button>
       <button type="button" class="decimal" value=".">.</button>
-      <button type="button" class="answer" value="Ans">Ans</button>
+      <button type="button" class="save" value="Save">Save</button>
       <button type="button" class="equal-sign operator" value="=">=</button>
     </div>
   </div>

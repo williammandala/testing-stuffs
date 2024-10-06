@@ -1,12 +1,14 @@
 ﻿// Get all the keys from the document
 const keys = document.querySelector('.calculator-keys');
 const screen = document.querySelector('.calculator-screen');
+const previousDisplay = document.querySelector('.calculator-previous'); // New element for previous calculation
 
 let currentInput = '0';
 let previousInput = '';
 let operator = null;
 let waitingForSecondOperand = false;
-let lastResult = 0; // Variable to store the last result
+let savedNumber = null; // Variable to store the saved number
+let previousCalculation = ''; // Variable to store the previous calculation expression
 
 // Add event listener to the keys
 keys.addEventListener('click', event => {
@@ -40,8 +42,8 @@ keys.addEventListener('click', event => {
     case '%':
       inputPercent();
       break;
-    case 'Ans':
-      inputAnswer();
+    case 'Save':
+      saveNumber();
       break;
     default:
       if (Number.isInteger(parseFloat(value))) {
@@ -55,6 +57,7 @@ keys.addEventListener('click', event => {
 // Functions to handle inputs and calculations
 function updateScreen() {
   screen.value = currentInput;
+  previousDisplay.textContent = previousCalculation; // Update previous calculation display
 }
 
 function inputNumber(number) {
@@ -112,8 +115,11 @@ function calculate() {
   if (operator && !waitingForSecondOperand) {
     let result = performCalculation[operator](previousInput, inputValue);
     result = roundResult(result);
+
+    // Store the previous calculation expression
+    previousCalculation = `${previousInput} ${operator} ${inputValue} =`;
+
     currentInput = String(result);
-    lastResult = result; // Store the result for "Ans"
     previousInput = '';
     operator = null;
     waitingForSecondOperand = false;
@@ -125,6 +131,7 @@ function resetCalculator() {
   previousInput = '';
   operator = null;
   waitingForSecondOperand = false;
+  previousCalculation = '';
 }
 
 function backspace() {
@@ -135,19 +142,31 @@ function backspace() {
   }
 }
 
+// Function to handle percentage calculations
 function inputPercent() {
   const value = parseFloat(currentInput);
   const result = value / 100;
   currentInput = String(roundResult(result));
 }
 
-function inputAnswer() {
-  // Recall the last result
-  currentInput = String(lastResult);
-  waitingForSecondOperand = false;
+// Function to save the current number or recall the saved number
+function saveNumber() {
+  if (savedNumber === null) {
+    // Save the current number
+    savedNumber = parseFloat(currentInput);
+    previousCalculation = `Saved: ${savedNumber}`;
+  } else {
+    // Recall the saved number
+    if (waitingForSecondOperand) {
+      previousInput = savedNumber;
+      waitingForSecondOperand = false;
+    } else {
+      currentInput = String(savedNumber);
+    }
+    previousCalculation = `Recalled: ${savedNumber}`;
+  }
 }
 
-// Function to round results to avoid floating point errors
 function roundResult(number) {
   return parseFloat(number.toFixed(10));
 }
