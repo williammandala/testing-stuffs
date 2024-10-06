@@ -49,13 +49,17 @@ button:hover {
   color: #fff;
 }
 
-.all-clear {
+.all-clear, .backspace {
   background-color: #ff3b30;
   color: #fff;
 }
 
 .equal-sign {
-  grid-column: span 4;
   background-color: #007aff;
+  color: #fff;
+}
+
+.parentheses {
+  background-color: #a9a9a9;
   color: #fff;
 }

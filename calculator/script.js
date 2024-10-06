@@ -33,6 +33,15 @@ keys.addEventListener('click', event => {
     case '.':
       inputDecimal(value);
       break;
+    case 'backspace':
+      backspace();
+      break;
+    case '%':
+      inputPercent();
+      break;
+    case '()':
+      inputParentheses();
+      break;
     default:
       if (Number.isInteger(parseFloat(value))) {
         inputNumber(value);
@@ -113,4 +122,28 @@ function resetCalculator() {
   previousInput = '';
   operator = null;
   waitingForSecondOperand = false;
+}
+
+function backspace() {
+  if (currentInput.length > 1) {
+    currentInput = currentInput.slice(0, -1);
+  } else {
+    currentInput = '0';
+  }
+}
+
+function inputPercent() {
+  const value = parseFloat(currentInput);
+  currentInput = String(value / 100);
+}
+
+function inputParentheses() {
+  // Implementing parentheses requires an expression parser.
+  // This functionality is complex and beyond simple calculator logic.
+  // Here, we'll simulate a simple toggle between adding '(' or ')'.
+  if (currentInput === '0') {
+    currentInput = '(';
+  } else {
+    currentInput += ')';
+  }
 }
