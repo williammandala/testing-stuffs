@@ -59,7 +59,14 @@ button:hover {
   color: #fff;
 }
 
-.parentheses {
+/* Remove parentheses styles as they're no longer needed */
+/*.parentheses {
+  background-color: #a9a9a9;
+  color: #fff;
+}*/
+
+/* Optional: Style the "Ans" button */
+.answer {
   background-color: #a9a9a9;
   color: #fff;
 }

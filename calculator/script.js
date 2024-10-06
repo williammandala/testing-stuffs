@@ -6,6 +6,7 @@ let currentInput = '0';
 let previousInput = '';
 let operator = null;
 let waitingForSecondOperand = false;
+let lastResult = 0; // Variable to store the last result
 
 // Add event listener to the keys
 keys.addEventListener('click', event => {
@@ -39,8 +40,8 @@ keys.addEventListener('click', event => {
     case '%':
       inputPercent();
       break;
-    case '()':
-      inputParentheses();
+    case 'Ans':
+      inputAnswer();
       break;
     default:
       if (Number.isInteger(parseFloat(value))) {
@@ -88,8 +89,8 @@ function handleOperator(nextOperator) {
   if (previousInput === '') {
     previousInput = inputValue;
   } else if (operator) {
-    const result = performCalculation[operator](previousInput, inputValue);
-
+    let result = performCalculation[operator](previousInput, inputValue);
+    result = roundResult(result);
     currentInput = String(result);
     previousInput = result;
   }
@@ -109,8 +110,10 @@ function calculate() {
   const inputValue = parseFloat(currentInput);
 
   if (operator && !waitingForSecondOperand) {
-    const result = performCalculation[operator](previousInput, inputValue);
+    let result = performCalculation[operator](previousInput, inputValue);
+    result = roundResult(result);
     currentInput = String(result);
+    lastResult = result; // Store the result for "Ans"
     previousInput = '';
     operator = null;
     waitingForSecondOperand = false;
@@ -134,16 +137,17 @@ function backspace() {
 
 function inputPercent() {
   const value = parseFloat(currentInput);
-  currentInput = String(value / 100);
+  const result = value / 100;
+  currentInput = String(roundResult(result));
 }
 
-function inputParentheses() {
-  // Implementing parentheses requires an expression parser.
-  // This functionality is complex and beyond simple calculator logic.
-  // Here, we'll simulate a simple toggle between adding '(' or ')'.
-  if (currentInput === '0') {
-    currentInput = '(';
-  } else {
-    currentInput += ')';
-  }
+function inputAnswer() {
+  // Recall the last result
+  currentInput = String(lastResult);
+  waitingForSecondOperand = false;
+}
+
+// Function to round results to avoid floating point errors
+function roundResult(number) {
+  return parseFloat(number.toFixed(10));
 }
